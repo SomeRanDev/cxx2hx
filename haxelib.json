@@ -1,0 +1,15 @@
+{
+	"name": "cxx2hx",
+	"version": "1.0.0",
+	"description": "Generates Reflaxe/C++ Haxe externs from C++ header files.",
+	"url": "https://github.com/RobertBorghese/cxx2hx",
+	"license": "MIT",
+	"tags": [
+		"extern",
+		"generation",
+		"c++",
+		"cxx"
+	],
+	"releasenote": "Initial release",
+	"contributors": ["RobertBorghese"]
+}
