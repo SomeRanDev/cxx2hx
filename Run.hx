@@ -244,6 +244,8 @@ function compileEnum(e: Dynamic, filePath: String) {
 	if(!shouldGenClass(e)) return;
 	if(e.values.length == 0) return; // if no values, assume forward declare?
 
+	replacementTypes = [];
+
 	final ns = getNamespaceMembers(e.namespace);
 	final folder = Path.join([OUTPUT_DIR].concat(ns));
 	createDir(folder);
@@ -287,6 +289,8 @@ extern enum $haxeName {
 **/
 function compileFunctions(functions: Array<Dynamic>, filePath: String) {
 	final funcs: Map<String, Array<Dynamic>> = [];
+
+	replacementTypes = [];
 
 	for(f in functions) {
 		final fList = funcs.get(f.namespace) ?? [];
@@ -338,6 +342,12 @@ extern class $haxeName {
 }
 
 /**
+	If a type is generated that exists as a key in
+	this Map, it is replaced with the Map's value.
+**/
+var replacementTypes: Map<String, String> = [];
+
+/**
 	Generate a Haxe extern class using the data from
 	the C++ class.
 **/
@@ -361,6 +371,17 @@ function compileClass(cls: Dynamic, filePath: String) {
 		while(it.hasNext()) {
 			final e = it.next();
 			compileEnum(e, filePath);
+		}
+	}
+
+	replacementTypes = [];
+
+	final usings = Reflect.field(cls, "using");
+	if(usings != null) {
+		for(field in Reflect.fields(usings)) {
+			final name = field;
+			final data = Reflect.field(usings, field);
+			replacementTypes.set(name, data.type);
 		}
 	}
 
@@ -584,6 +605,11 @@ function genMethod(funcData: Dynamic, isOverload: Bool, extraMeta: Null<Array<Ar
 	Generates the Haxe equivalent of the C++ type string.
 **/
 function genType(typeName: String): Null<String> {
+	typeName = typeName.trim();
+	if(replacementTypes.exists(typeName)) {
+		typeName = replacementTypes.get(typeName);
+	}
+	
 	final wraps = [];
 	function unwrapExtras(n: String): String {
 		final t = n.trim();
@@ -631,7 +657,9 @@ function genType(typeName: String): Null<String> {
 	Transforms a name using underscore style to capital camel case.
 **/
 function haxeifyTypeName(n: String): String {
-	final namePieces: Array<String> = n.trim().split("_");
+	var ntrim = n.trim();
+
+	final namePieces: Array<String> = ntrim.split("_");
 	var result = "";
 	for(piece in namePieces) {
 		result += piece.substring(0, 1).toUpperCase() + piece.substring(1);
