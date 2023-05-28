@@ -1,6 +1,6 @@
 {
 	"name": "cxx2hx",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Generates Reflaxe/C++ Haxe externs from C++ header files.",
 	"url": "https://github.com/RobertBorghese/cxx2hx",
 	"license": "MIT",
@@ -10,6 +10,6 @@
 		"c++",
 		"cxx"
 	],
-	"releasenote": "Initial release",
+	"releasenote": "Inject using types; prevent identical methods + custom operators",
 	"contributors": ["RobertBorghese"]
 }
