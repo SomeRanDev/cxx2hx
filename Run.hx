@@ -536,6 +536,7 @@ function genMethod(funcData: Dynamic, isOverload: Bool, extraMeta: Null<Array<Ar
 
 	if(funcData.name == null) return null;
 	final name = haxeifyFunctionName(funcData.name);
+	if(name == "") return null;
 	var haxeName = name ?? funcData.name;
 	if(funcData.constructor) {
 		haxeName = "new";
@@ -652,7 +653,8 @@ function haxeifyFunctionName(n: String): Null<String> {
 			null;
 		}
 	} else if(n.contains("operator")) {
-		"customOperator";
+		//"customOperator";
+		""; // Ignore operators for now
 	} else {
 		~/[^A-Za-z0-9_]+/g.split(n).join("_");
 	}
