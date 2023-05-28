@@ -1,6 +1,6 @@
 # cxx2hx - C++ -> Haxe Externs
 
-Generate [Reflaxe/C++](https://github.com/RobertBorghese/reflaxe.CPP) Haxe externs from C++ header files (for use with target)
+Generate [Reflaxe/C++](https://github.com/RobertBorghese/reflaxe.CPP) Haxe externs from C++ header files.
 
 This is, and will always be, an imperfect project. The externs generated from this are not meant to be used directly; rather, they should be used as a base that are manually tweaked to remove any Haxe errors that may occur.
 
