@@ -445,9 +445,19 @@ function compileClass(cls: Dynamic, filePath: String) {
 		if(m != null) methods.push(m);
 	}
 	
+	final methodKeys: Map<String, Bool> = [];
 	for(i in 0...methodData.length) {
 		final prop = methodData[i];
 		final isOverload = count.get(prop.name) > 1;
+
+		// Make sure there aren't any obvious repeats
+		final key = prop.name + "(" + prop.parameters.map(p -> p.name).join(", ") + ")";
+		if(methodKeys.exists(key)) {
+			continue;
+		} else {
+			methodKeys.set(key, true);
+		}
+
 		final m = genMethod(prop, isOverload);
 		if(m != null) methods.push(m);
 	}
